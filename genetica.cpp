@@ -16,25 +16,11 @@ namespace genetica {
 		bool operator < (const Gene &gene) const {
 			return ((Trait)<(gene.Trait));}
 	};
-	class Genetic{
-		public:
-		std::set<Gene> DNA;
-		Genetic(Genetic& genetic): DNA(genetic.DNA) {}; //TODO: Init
-		Genetic() {};
-		Genetic operator + (const Genetic &Mate){
-			/*for(Gene gene : this.Dna){
-				//TODO: chance to skip
-				//TODO: chose gene based on CrossFactor
-				//TODO: Mutate gene based on MutationFactor
-			}*/
-			//TODO: chance to add gene
-		}
-	};
 	class Individual{
-		Genetic genetic;
+		std::set<Gene> DNA;
 		public:
-		Individual(Genetic& genetics): genetic{genetics} {};
-		Individual(Individual&& individual): genetic{individual.genetic} {};
+		Individual(std::set<Gene>& genetics): DNA{genetics} {};
+		Individual(Individual&& individual): DNA{individual.DNA} {};
 		double Perform();
 	};
 	class ENV {
@@ -44,6 +30,7 @@ namespace genetica {
 		std::uniform_real_distribution<> ST_UNIFORM; 
 		public:
 		std::vector<Individual> population;
+		//Individual *population;
 		double MF,MR,CF;
 		int PP;
 		/*static void ST_Init(){
@@ -66,25 +53,21 @@ namespace genetica {
 		double Fitness(Individual ind){
 			return ind.Perform();}
 		double Postfit(double fitness);
-		Genetic Distribute(){
-
-		}
 		void Populate() {
-			Genetic genetic[PP];
+			std::set<Gene> genetics[PP];
 			for(int i=0;i<1;i++){
 				for(int j=0;j<PP;j++){
 					double random=.5;
-					genetic[j].DNA.insert(Gene {i,random});
+					genetics[j].insert(Gene {i,random});
 				}
 			}
-			for(int i=0;i<PP;i++){
-				population.push_back(Individual{genetic[i]});
-			}
+			for(int i=0;i<PP;i++)
+				population.push_back(new Individual(genetics[i]));
 		}
 	};
 }
 double genetica::Individual::Perform(){
-	return (*(this->genetic.DNA.find(Gene(0)))).Value; 
+	return (*(this->DNA.find(Gene(0)))).Value; 
 }
 int main(){
 	using namespace genetica;
