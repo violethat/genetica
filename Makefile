@@ -1,6 +1,2 @@
-test: genetica.cpp
-	g++ -std=c++17 genetica.cpp -o genetica
-	./genetica
-test2: test.cpp
-	g++ -std=c++17 test.cpp -o test 
-	./test
+%: %.cpp
+	g++ -std=c++17 $< -march=native -mtune=native -O3 -o $@
